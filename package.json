@@ -8,8 +8,8 @@
     "clean": "rm -rf .next/cache",
     "start": "next start",
     "lint": "next lint",
-    "pages:build": "rm -rf .next && next build && rm -rf .next/cache",
-    "pages:deploy": "npx @cloudflare/next-on-pages deploy .next",
+    "pages:build": "rm -rf .next && next build",
+    "pages:deploy": "npx @cloudflare/next-on-pages",
     "preview": "bun run pages:build && wrangler pages dev"
   },
   "dependencies": {
