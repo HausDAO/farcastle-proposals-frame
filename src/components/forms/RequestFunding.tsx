@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { FormComponentProps } from "../app/FormSwitcher";
+import { useParams } from "next/navigation";
+import { useDao } from "@/hooks/useDao";
+import { useDaoTokenBalances } from "@/hooks/useDaoTokenBalances";
 import { FormActionButtons } from "../app/FormActionButtons";
 import { ProposalMetaFields } from "../app/ProposalMetaFields";
 
@@ -16,7 +19,7 @@ const formSchema = z.object({
   link: z.string().url().optional().or(z.literal("")),
 });
 
-export const Signal = ({
+export const RequestFunding = ({
   formConfig,
   handleSubmit,
   loading,
@@ -32,6 +35,16 @@ export const Signal = ({
       link: "",
     },
   });
+
+  const params = useParams<{ chainid: string; daoid: string }>();
+  const { dao } = useDao({ chainid: params.chainid, daoid: params.daoid });
+
+  const { tokens } = useDaoTokenBalances({
+    chainid: params.chainid,
+    safeAddress: dao?.safeAddress,
+  });
+
+  console.log("tokens", tokens);
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const preparedValues = {

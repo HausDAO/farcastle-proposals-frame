@@ -1,11 +1,8 @@
-import { Dispatch } from "react";
-import { FormValues } from "./form-configs";
-
 export type SubgraphQueryOrderPaginationOptions = {
   skip?: number;
   first?: number;
   orderBy?: string;
-  orderDirection?: "asc" | "desc";
+  orderDirection?: 'asc' | 'desc';
 };
 
 export type YeeterItem = {
@@ -221,10 +218,16 @@ export type WaitForReceipt = {
   }[];
 };
 
-export type FormComponentProps = {
-  isConfirmed: boolean;
-  formValues: FormValues;
-  validValues: boolean;
-  setFormValues: Dispatch<FormValues>;
-  setValidValues: Dispatch<boolean>;
+export type TokenInfo = {
+  decimals: number;
+  symbol: string;
+  name: string;
+  logoUri: string | null;
+};
+export type TokenBalance = {
+  token: TokenInfo | null;
+  tokenAddress: string | null;
+  balance: string;
+  ethValue: string;
+  timestamp: string;
 };

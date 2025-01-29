@@ -1,48 +1,57 @@
-import { Dispatch } from "react";
-import { FormValues } from "@/lib/form-configs";
+import { FormConfig } from "@/lib/form-configs";
 import { Signal } from "../forms/Signal";
-import { Sample } from "../forms/Sample";
+import { SampleForm } from "../forms/SampleForm";
+import { ArbitraryState } from "@/lib/tx-prepper/prepper-types";
+import { RequestMembership } from "../forms/RequestMembership";
 // import { RequestMembership } from "../forms/RequestMembership";
 
+export type FormComponentProps = {
+  formConfig: FormConfig;
+  confirmed: boolean;
+  loading: boolean;
+  invalidConnection: boolean;
+  handleSubmit: (values: ArbitraryState) => Promise<void>;
+};
+
 export const FormSwitcher = ({
-  formid,
-  isConfirmed,
-  formValues,
-  validValues,
-  setFormValues,
-  setValidValues,
-}: {
-  formid: string;
-  isConfirmed: boolean;
-  formValues: FormValues;
-  validValues: boolean;
-  setFormValues: Dispatch<FormValues>;
-  setValidValues: Dispatch<boolean>;
-}) => {
+  formConfig,
+  confirmed,
+  loading,
+  invalidConnection,
+  handleSubmit,
+}: FormComponentProps) => {
   const renderForm = () => {
-    switch (formid) {
+    switch (formConfig.id) {
       case "SAMPLE":
-        return <Sample />;
+        return (
+          <SampleForm
+            formConfig={formConfig}
+            confirmed={confirmed}
+            loading={loading}
+            invalidConnection={invalidConnection}
+            handleSubmit={handleSubmit}
+          />
+        );
       case "POST_SIGNAL":
         return (
           <Signal
-            isConfirmed={isConfirmed}
-            formValues={formValues}
-            validValues={validValues}
-            setFormValues={setFormValues}
-            setValidValues={setValidValues}
+            formConfig={formConfig}
+            confirmed={confirmed}
+            loading={loading}
+            invalidConnection={invalidConnection}
+            handleSubmit={handleSubmit}
           />
         );
-      // case "REQUEST_MEMBERSHIP":
-      //   return (
-      //     <RequestMembership
-      //       isConfirmed={isConfirmed}
-      //       formValues={formValues}
-      //       validValues={validValues}
-      //       setFormValues={setFormValues}
-      //       setValidValues={setValidValues}
-      //     />
-      //   );
+      case "REQUEST_MEMBERSHIP":
+        return (
+          <RequestMembership
+            formConfig={formConfig}
+            confirmed={confirmed}
+            loading={loading}
+            invalidConnection={invalidConnection}
+            handleSubmit={handleSubmit}
+          />
+        );
 
       default:
         return null;
