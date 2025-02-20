@@ -1,24 +1,22 @@
 "use client";
 
+import farcasterFrame from "@farcaster/frame-wagmi-connector";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import {
-  base,
-  sepolia,
-  mainnet,
-  polygon,
-  gnosis,
-  optimism,
   arbitrum,
+  base,
+  gnosis,
+  mainnet,
+  optimism,
+  polygon,
+  sepolia,
 } from "wagmi/chains";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import farcasterFrame from "@farcaster/frame-wagmi-connector";
 
 import { injected } from "wagmi/connectors";
-import { FrameSDKProvider } from "./FramesSDKProvider";
-import { DaoRecordProvider } from "./DaoRecordProvider";
 import { DaoHooksProvider } from "./DaoHooksProvider";
-
-// import { AuthedPrefetchesProvider } from "./AuthedPrefetchesProvider";
+import { DaoRecordProvider } from "./DaoRecordProvider";
+import { FrameSDKProvider } from "./FramesSDKProvider";
 
 export const config = createConfig({
   chains: [base, sepolia, mainnet, polygon, gnosis, optimism, arbitrum],
@@ -37,19 +35,17 @@ export const config = createConfig({
 
 const queryClient = new QueryClient();
 
-const daoHooksConfig = {
-  graphKey: process.env.NEXT_PUBLIC_GRAPH_KEY || "",
-};
-
 function Providers({ children }: React.PropsWithChildren) {
+  const daoHooksConfig = {
+    graphKey: process.env.NEXT_PUBLIC_GRAPH_KEY || "",
+  };
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <FrameSDKProvider>
           <DaoHooksProvider keyConfig={daoHooksConfig}>
-            {/* <AuthedPrefetchesProvider> */}
             <DaoRecordProvider>{children}</DaoRecordProvider>
-            {/* </AuthedPrefetchesProvider> */}
           </DaoHooksProvider>
         </FrameSDKProvider>
       </QueryClientProvider>

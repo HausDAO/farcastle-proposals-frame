@@ -1,10 +1,11 @@
+import { Card } from "@/components/ui/card";
 import { Metadata } from "next";
 import DaoHome from "./dao-home";
 
+export const runtime = "edge"; // Required for Cloudflare Pages
 const appUrl = process.env.NEXT_PUBLIC_URL;
 
 export const revalidate = 300;
-export const runtime = "edge";
 
 type Props = {
   params: Promise<{ chainid: string; daoid: string }>;
@@ -41,5 +42,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function Page() {
-  return <DaoHome />;
+  return (
+    <div className="w-full h-full pb-4 px-4">
+      <Card className="flex flex-col items-center pt-4 pb-8 rounded-none">
+        <DaoHome />
+      </Card>
+    </div>
+  );
 }

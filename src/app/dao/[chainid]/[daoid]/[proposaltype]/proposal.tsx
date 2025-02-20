@@ -1,30 +1,31 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
 import sdk from "@farcaster/frame-sdk";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import {
   useAccount,
-  useWaitForTransactionReceipt,
-  useConnect,
-  useWriteContract,
   useChainId,
+  useConnect,
   useSwitchChain,
+  useWaitForTransactionReceipt,
+  useWriteContract,
 } from "wagmi";
 
-import { fromHex } from "viem";
-import { Button } from "@/components/ui/button";
-import { prepareTX } from "@/lib/tx-prepper/tx-prepper";
-import { getExplorerUrl, getWagmiChainObj } from "@/lib/constants";
-import { useParams } from "next/navigation";
-import { FORM_CONFIGS, FormConfig, validFormId } from "@/lib/form-configs";
-import { ArbitraryState, ValidNetwork } from "@/lib/tx-prepper/prepper-types";
-import { useFrameSDK } from "@/providers/FramesSDKProvider";
-import { useDaoRecord } from "@/providers/DaoRecordProvider";
-import { WaitForReceipt } from "@/lib/types";
-import { proposalCastUrl } from "@/lib/formatters";
 import { FormSwitcher } from "@/components/app/FormSwitcher";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-// import { FormSwitcher } from "@/forms/FormSwitcher";
+import { LoadingSpinner } from "@/components/ui/loading";
+import { getExplorerUrl, getWagmiChainObj } from "@/lib/constants";
+import { FORM_CONFIGS, FormConfig, validFormId } from "@/lib/form-configs";
+import { proposalCastUrl, truncateError } from "@/lib/formatters";
+import { ArbitraryState, ValidNetwork } from "@/lib/tx-prepper/prepper-types";
+import { prepareTX } from "@/lib/tx-prepper/tx-prepper";
+import { WaitForReceipt } from "@/lib/types";
+import { useDaoRecord } from "@/providers/DaoRecordProvider";
+import { useFrameSDK } from "@/providers/FramesSDKProvider";
+import { useParams } from "next/navigation";
+import { fromHex } from "viem";
 
 const getPropidFromReceipt = (receipt: WaitForReceipt): number | null => {
   if (!receipt || !receipt.logs[0].topics[1]) return null;
@@ -89,17 +90,20 @@ export default function Proposal() {
         ...values,
       },
       senderAddress: address,
-      chainId: daochain,
-      safeId: daosafe,
+      // TODO: is safeID and chainID needed at both levels?
+      // chainId: daochain,
+      // safeId: daosafe,
       daoId: daoid,
       localABIs: {},
     };
 
-    // TODO: is safeID and chainID needed at both levels?
-    // how to swap txes for fundung?
+    let tx = formConfig.tx;
+    if (formConfig.txToggle && values.txKey) {
+      tx = formConfig.txToggle[values.txKey];
+    }
 
     const txPrep = await prepareTX({
-      tx: formConfig.tx,
+      tx,
       chainId: daochain as ValidNetwork,
       safeId: daosafe,
       appState: wholeState,
@@ -115,11 +119,19 @@ export default function Proposal() {
 
   const renderError = (error: Error | null) => {
     if (!error) return null;
-    return <div className="text-red-500 text-xs mt-1">{error.message}</div>;
+    return (
+      <div className="text-destructive text-xs mt-1">
+        Error: {truncateError(error.message)}
+      </div>
+    );
   };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!formConfig) return null;
@@ -130,21 +142,22 @@ export default function Proposal() {
     <>
       <div className="w-full h-full space-y-4 pb-4 px-4">
         <Card className="flex flex-col items-center px-4 pt-4 pb-8 rounded-none">
-          <div className="text-muted font-display text-2xl uppercase mb-4">
+          <div className="text-muted font-display text-3xl uppercase mb-4">
             {formConfig.title}
           </div>
 
-          <div className="w-full space-y-4">
+          {!isConfirmed && (
             <FormSwitcher
               formConfig={formConfig}
               confirmed={isConfirmed}
               loading={isSendTxPending || isConfirming}
               invalidConnection={!isConnected || !validChain}
               handleSubmit={handleSend}
+              formElmClass="w-full space-y-4"
             />
-          </div>
+          )}
 
-          <div className="flex flex-col gap-2 w-full space-y-4 pb-4 px-4 mt-3">
+          <div className="flex flex-col gap-2 w-full">
             {isSendTxError && renderError(sendTxError)}
 
             {!isConnected && (
@@ -165,12 +178,27 @@ export default function Proposal() {
               </Button>
             )}
 
-            {propid && (
-              <Button onClick={openProposalCastUrl}>Cast Proposal</Button>
-            )}
-
-            {hash && (
-              <Button onClick={openUrl}>View Tx on Block Explorer</Button>
+            {isConfirmed && (
+              <div className="flex flex-col items-center gap-8">
+                <Image
+                  src="/heart.svg"
+                  alt="Success"
+                  width={300}
+                  height={254}
+                />
+                <div className="flex flex-col w-full items-center gap-2">
+                  {propid && (
+                    <Button onClick={openProposalCastUrl} className="w-full">
+                      Cast Proposal
+                    </Button>
+                  )}
+                  {hash && (
+                    <Button onClick={openUrl} className="w-full">
+                      View Transaction
+                    </Button>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </Card>

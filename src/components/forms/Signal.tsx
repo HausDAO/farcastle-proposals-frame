@@ -1,20 +1,23 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Form } from "@/components/ui/form";
-import { FormComponentProps } from "../app/FormSwitcher";
+import {
+  getMetaFieldsList,
+  getRequiredFieldsList,
+} from "@/lib/tx-prepper/form-helpers";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import { FormActionButtons } from "../app/FormActionButtons";
+import { FormComponentProps } from "../app/FormSwitcher";
 import { ProposalMetaFields } from "../app/ProposalMetaFields";
 
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  description: z.string(),
-  link: z.string().url().optional().or(z.literal("")),
+const formSchema = yup.object().shape({
+  title: yup.string().required(),
+  description: yup.string(),
 });
+const requiredFields = getRequiredFieldsList(formSchema);
+const metaFields = getMetaFieldsList(formSchema);
 
 export const Signal = ({
   formConfig,
@@ -22,18 +25,19 @@ export const Signal = ({
   loading,
   confirmed,
   invalidConnection,
+  formElmClass,
 }: FormComponentProps) => {
   const { submitButtonText } = formConfig;
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const form = useForm<yup.InferType<typeof formSchema>>({
+    resolver: yupResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
-      link: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: yup.InferType<typeof formSchema>) => {
     const preparedValues = {
       ...values,
     };
@@ -44,11 +48,12 @@ export const Signal = ({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full px-4 space-y-4"
-      >
-        <ProposalMetaFields disabled={disabled} />
+      <form onSubmit={form.handleSubmit(onSubmit)} className={formElmClass}>
+        <ProposalMetaFields
+          disabled={disabled}
+          requiredFields={requiredFields}
+          metaFields={metaFields}
+        />
 
         <FormActionButtons
           submitButtonText={submitButtonText}

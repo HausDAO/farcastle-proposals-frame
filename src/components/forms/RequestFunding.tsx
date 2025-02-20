@@ -1,34 +1,43 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { FormComponentProps } from "../app/FormSwitcher";
-import { useParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 import { useDao } from "@/hooks/useDao";
 import { useDaoTokenBalances } from "@/hooks/useDaoTokenBalances";
+import {
+  getMetaFieldsList,
+  getRequiredFieldsList,
+} from "@/lib/tx-prepper/form-helpers";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { parseUnits } from "viem";
+import * as yup from "yup";
 import { FormActionButtons } from "../app/FormActionButtons";
+import { FormComponentProps } from "../app/FormSwitcher";
+import { ProposalFormLabel } from "../app/ProposalFormLabel";
 import { ProposalMetaFields } from "../app/ProposalMetaFields";
-import { Input } from "@/components/ui/input";
+import { TokenRequestSelect } from "../app/TokenRequestSelect";
 
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
-  }),
-  description: z.string(),
-  link: z.string().url().optional().or(z.literal("")),
-  recipient: z.string(),
-  tokenAddress: z.string(),
-  tokenAmount: z.string(),
+const formSchema = yup.object().shape({
+  title: yup.string().required("title is required"),
+  description: yup.string(),
+  link: yup.string().url(),
+  recipient: yup
+    .string()
+    .min(42, "recipient must be 42 characters")
+    .required("recipient is required"),
+  tokenAddress: yup.string().required("required"),
+  tokenAmount: yup.string().required("required"),
 });
+const requiredFields = getRequiredFieldsList(formSchema);
+const metaFields = getMetaFieldsList(formSchema);
 
 export const RequestFunding = ({
   formConfig,
@@ -36,10 +45,11 @@ export const RequestFunding = ({
   loading,
   confirmed,
   invalidConnection,
+  formElmClass,
 }: FormComponentProps) => {
   const { submitButtonText } = formConfig;
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<yup.InferType<typeof formSchema>>({
+    resolver: yupResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -58,12 +68,15 @@ export const RequestFunding = ({
     safeAddress: dao?.safeAddress,
   });
 
-  console.log("tokens", tokens);
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: yup.InferType<typeof formSchema>) => {
+    const txKey =
+      values.tokenAddress === "0x0" ? "REQUEST_FUNDING_ETH" : "REQUEST_FUNDING";
     const preparedValues = {
       ...values,
+      tokenAmount: parseUnits(values.tokenAmount || "0", 18).toString(),
+      txKey,
     };
+
     handleSubmit(preparedValues);
   };
 
@@ -71,11 +84,12 @@ export const RequestFunding = ({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full px-4 space-y-4"
-      >
-        <ProposalMetaFields disabled={disabled} />
+      <form onSubmit={form.handleSubmit(onSubmit)} className={formElmClass}>
+        <ProposalMetaFields
+          disabled={disabled}
+          requiredFields={requiredFields}
+          metaFields={metaFields}
+        />
 
         <FormField
           control={form.control}
@@ -83,9 +97,11 @@ export const RequestFunding = ({
           disabled={disabled}
           render={({ field }) => (
             <FormItem>
-              <div className="flex mb-2 justify-between">
-                <FormLabel>Recipient</FormLabel>
-              </div>
+              <ProposalFormLabel
+                label="Recipient"
+                id="recipient"
+                requiredFields={requiredFields}
+              />
               <FormControl>
                 <Input id="recipient" placeholder="Address" {...field} />
               </FormControl>
@@ -94,39 +110,7 @@ export const RequestFunding = ({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="tokenAddress"
-          disabled={disabled}
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex mb-2 justify-between">
-                <FormLabel>Token Address</FormLabel>
-              </div>
-              <FormControl>
-                <Input id="tokenAddress" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="tokenAmount"
-          disabled={disabled}
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex mb-2 justify-between">
-                <FormLabel>Funding Requested</FormLabel>
-              </div>
-              <FormControl>
-                <Input id="tokenAmount" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <TokenRequestSelect disabled={disabled} tokens={tokens} />
 
         <FormActionButtons
           submitButtonText={submitButtonText}
