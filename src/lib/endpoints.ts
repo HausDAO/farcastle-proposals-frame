@@ -7,7 +7,6 @@ export const getGraphUrl = ({
   graphKey: string;
   subgraphKey: string;
 }): string => {
-  console.log("getGraphUrl chainid", chainid);
   const subgraphHash = SUBGRAPH_IDS[subgraphKey][chainid];
   if (!subgraphHash) {
     console.log("invalid chainid or subgraphkey");
