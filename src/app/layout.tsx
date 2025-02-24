@@ -13,7 +13,7 @@ const frame = {
     action: {
       type: "launch_frame",
       name: "Proposals",
-      url: "https://${process.env.NEXT_PUBLIC_URL}",
+      url: `https://${process.env.NEXT_PUBLIC_URL}`,
       iconImageUrl: `https://${process.env.NEXT_PUBLIC_URL}/icon.png`,
       splashImageUrl: `https://${process.env.NEXT_PUBLIC_URL}/splash.png`,
       splashBackgroundColor: "#341A34",
@@ -23,7 +23,7 @@ const frame = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    metadataBase: new URL("https://${process.env.NEXT_PUBLIC_URL}"),
+    metadataBase: new URL(`https://${process.env.NEXT_PUBLIC_URL}`),
     title: "Proposals",
     openGraph: {
       title: "Farcastle Proposals",
