@@ -36,3 +36,25 @@ export const getExplorerUrl = (chainid?: string): string | undefined => {
 export const getWagmiChainObj = (chainid?: string): Chain => {
   return WAGMI_CHAIN_OBJS[chainid || "0xaa36a7"];
 };
+
+export const HAUS_RPC_DEFAULTS: Record<string, string> = {
+  "0x1": `https://eth-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+  "0x64": `https://gnosis-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+  "0xa": `https://opt-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+  "0x89": `https://polygon-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+  "0xa4b1": `https://arb-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+  "0xaa36a7": "https://eth-sepolia.g.alchemy.com/v2/demo",
+  "0x2105": `https://base-mainnet.g.alchemy.com/v2/${
+    process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  }`,
+};
