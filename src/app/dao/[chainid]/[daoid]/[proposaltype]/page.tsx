@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import Proposal from "./proposal";
 import { FORM_CONFIGS } from "@/lib/form-configs";
 
+export const runtime = "edge";
+
 const appUrl = process.env.NEXT_PUBLIC_URL;
 
 type Props = {

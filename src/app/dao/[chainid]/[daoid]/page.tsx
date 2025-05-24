@@ -2,6 +2,8 @@ import { Card } from "@/components/ui/card";
 import { Metadata } from "next";
 import DaoHome from "./dao-home";
 
+export const runtime = "edge";
+
 const appUrl = process.env.NEXT_PUBLIC_URL;
 
 type Props = {
