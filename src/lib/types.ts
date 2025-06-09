@@ -158,7 +158,7 @@ export type ProposalItem = {
   processedBy: string;
   processed: boolean;
   processTxAt: string;
-  actionFailed: string;
+  actionFailed: boolean;
   passed: boolean;
   proposalOffering: string;
   maxTotalSharesAndLootAtYesVote: string;
@@ -177,7 +177,7 @@ export type ProposalItem = {
     quorumPercent: string;
     minRetentionPercent: string;
   };
-  votes: VoteItem;
+  votes: VoteItem[];
 };
 
 export type VoteItem = {

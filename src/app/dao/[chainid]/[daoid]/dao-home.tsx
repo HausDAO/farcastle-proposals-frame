@@ -52,7 +52,7 @@ export default function DaoHome() {
       )}
       <div className="mt-4 w-full px-4">
         <Link
-          href={`/dao/${params.chainid}/${params.daoid}/POST_SIGNAL`}
+          href={`/dao/${params.chainid}/${params.daoid}/new/POST_SIGNAL`}
           className="w-full"
         >
           <Button className="w-full">Signal</Button>
@@ -61,7 +61,7 @@ export default function DaoHome() {
 
       <div className="mt-2 w-full px-4">
         <Link
-          href={`/dao/${params.chainid}/${params.daoid}/REQUEST_FUNDING`}
+          href={`/dao/${params.chainid}/${params.daoid}/new/REQUEST_FUNDING`}
           className="w-full"
         >
           <Button className="w-full">Funding</Button>
@@ -70,7 +70,7 @@ export default function DaoHome() {
 
       <div className="mt-2 w-full px-4">
         <Link
-          href={`/dao/${params.chainid}/${params.daoid}/REQUEST_MEMBERSHIP`}
+          href={`/dao/${params.chainid}/${params.daoid}/new/REQUEST_MEMBERSHIP`}
           className="w-full"
         >
           <Button className="w-full">Membership</Button>

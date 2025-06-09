@@ -1,21 +1,18 @@
 import { Metadata } from "next";
-import Proposal from "./proposal";
-import { FORM_CONFIGS } from "@/lib/form-configs";
+import ProposalDetail from "./proposal-detail";
 
 export const runtime = "edge";
 
 const appUrl = process.env.NEXT_PUBLIC_URL;
 
 type Props = {
-  params: Promise<{ chainid: string; daoid: string; proposaltype: string }>;
+  params: Promise<{ chainid: string; daoid: string; proposalid: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { chainid, daoid, proposaltype } = await params;
+  const { chainid, daoid, proposalid } = await params;
 
-  const proposalTitle = FORM_CONFIGS[proposaltype]
-    ? `Make ${FORM_CONFIGS[proposaltype].title} Proposal`
-    : "Make Proposal";
+  const proposalTitle = `Proposals`;
 
   const frame = {
     version: "next",
@@ -25,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       action: {
         type: "launch_frame",
         name: "Farcastle Proposals",
-        url: `${appUrl}/dao/${chainid}/${daoid}/${proposaltype}`,
+        url: `${appUrl}/dao/${chainid}/${daoid}/proposal/${proposalid}`,
         splashImageUrl: `${appUrl}/splash.png`,
         splashBackgroundColor: "#17151F",
       },
@@ -44,5 +41,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function Page() {
-  return <Proposal />;
+  return <ProposalDetail />;
 }
