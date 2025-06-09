@@ -7,7 +7,7 @@ import { useAccount, useChainId, useSwitchChain } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading";
-import { getExplorerUrl, getWagmiChainObj } from "@/lib/constants";
+import { getWagmiChainObj } from "@/lib/constants";
 import {
   getProposalTypeLabel,
   proposalCastUrl,
