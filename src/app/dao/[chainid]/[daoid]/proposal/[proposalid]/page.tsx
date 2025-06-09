@@ -12,16 +12,18 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { chainid, daoid, proposalid } = await params;
 
-  const proposalTitle = `Proposals`;
+  const imageUrl = new URL(
+    `${appUrl}/api/proposal/${chainid}/${daoid}/${proposalid}`
+  );
 
   const frame = {
     version: "next",
-    imageUrl: `${appUrl}/image.png`,
+    imageUrl: imageUrl.toString(),
     button: {
-      title: proposalTitle,
+      title: "View Proposal",
       action: {
         type: "launch_frame",
-        name: "Farcastle Proposals",
+        name: "Proposals",
         url: `${appUrl}/dao/${chainid}/${daoid}/proposal/${proposalid}`,
         splashImageUrl: `${appUrl}/splash.png`,
         splashBackgroundColor: "#17151F",
@@ -33,9 +35,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: "Farcastle Proposal",
       description: "Farcastle Proposal",
+      images: [{ url: imageUrl.toString() }],
     },
     other: {
       "fc:frame": JSON.stringify(frame),
+      "fc:frame:image": `${imageUrl.toString()}`,
+      "fc:frame:button:1": "View Proposal",
     },
   };
 }

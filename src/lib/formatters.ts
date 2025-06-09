@@ -1,5 +1,9 @@
 import { format } from "date-fns";
 
+export const truncateString = (string: string, length: number) => {
+  return string.length > length ? `${string.slice(0, length)} ...` : string;
+};
+
 export const truncateAddress = (address: string) => {
   if (!address) return "";
   return `${address.slice(0, 5)}...${address.slice(-4)}`;
@@ -14,7 +18,7 @@ export const proposalCastUrl = (
   daoid: string,
   propid: number
 ) => {
-  return `https://farcaster.xyz/~/compose?text=&embeds[]=https://frames.farcastle.net/molochv3/${daochain}/${daoid}/proposals/${propid}`;
+  return `https://farcaster.xyz/~/compose?text=&embeds[]=https://proposals.farcastle.net/dao/${daochain}/${daoid}/proposal/${propid}`;
 };
 
 export const PROPOSAL_TYPE_LABELS: Record<string, string> = {

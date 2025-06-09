@@ -7,11 +7,12 @@ import { useAccount, useChainId, useSwitchChain } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading";
-import { getWagmiChainObj } from "@/lib/constants";
+import { getExplorerUrl, getWagmiChainObj } from "@/lib/constants";
 import {
   getProposalTypeLabel,
   proposalCastUrl,
   truncateAddress,
+  truncateString,
 } from "@/lib/formatters";
 import { useDaoRecord } from "@/providers/DaoRecordProvider";
 import { useFrameSDK } from "@/providers/FramesSDKProvider";
@@ -78,6 +79,12 @@ export default function ProposalDetail() {
     setShouldSwitch(true);
   }, []);
 
+  const openUrl = useCallback(() => {
+    sdk.actions.openUrl(
+      `https://admin.daohaus.club/${daochain}/${daoid}/proposal/${proposalid}`
+    );
+  }, [daoid, daochain, proposalid]);
+
   if (!isLoaded || !proposal) {
     return (
       <div className="h-full w-full flex items-center justify-center">
@@ -98,30 +105,30 @@ export default function ProposalDetail() {
           {proposal.title}
         </div>
         <div className="text-muted font-mulish text-xl mb-4 w-full text-left">
-          {proposal.description}
+          {truncateString(proposal.description, 400)}
         </div>
 
         <div className="flex flex-row justify-between mb-4 w-full">
           <div>
-            <div className="text-primary font-display text-2xl  w-full text-left">
+            <div className="text-primary font-display text-xl  w-full text-left">
               Submitted by
             </div>
-            <div className="text-muted font-mulish text-lg w-full text-left">
+            <div className="text-muted font-mulish text-base w-full text-left">
               {truncateAddress(proposal.proposedBy)}
             </div>
           </div>
           <div>
-            <div className="text-primary font-display text-2xl  w-full text-left">
+            <div className="text-primary font-display text-xl  w-full text-left">
               Voting ends
             </div>
-            <div className="text-muted font-mulish text-lg w-full text-left">
+            <div className="text-muted font-mulish text-base w-full text-left">
               {truncateAddress(proposal.proposedBy)}
             </div>
           </div>
         </div>
 
         <div className="mb-4">
-          <div className="text-muted font-mulish text-xl w-full text-left">
+          <div className="text-desructive font-mulish text-xl w-full text-left">
             {proposalStateText(proposal, status)}
           </div>
 
@@ -157,6 +164,10 @@ export default function ProposalDetail() {
             <Button onClick={() => handleVote(false)}>Vote No</Button>
           </div>
         )}
+
+        <Button onClick={openUrl} variant="outline" className="w-full mt-4">
+          More Proposal Details
+        </Button>
 
         <Button
           onClick={openProposalCastUrl}
