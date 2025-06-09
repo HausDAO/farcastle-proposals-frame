@@ -41,7 +41,7 @@ export const useActiveDaoProposals = ({
   const graphQLClient = new GraphQLClient(dhUrl);
 
   const { data, ...rest } = useQuery({
-    queryKey: [`active-proposals-${chainid}-${daoid}`, { chainid, daoid }],
+    queryKey: [`active-proposals`, { chainid, daoid }],
     enabled: Boolean(chainid && daoid),
     queryFn: async (): Promise<{
       proposals: ProposalItem[];
