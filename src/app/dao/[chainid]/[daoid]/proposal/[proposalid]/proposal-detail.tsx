@@ -25,6 +25,8 @@ import {
   proposalStateText,
 } from "@/lib/proposals-status";
 import { useMember } from "@/hooks/useMember";
+import { VoteTx } from "@/components/app/VoteTx";
+import { ExecuteTx } from "@/components/app/ExecuteTx";
 
 export default function ProposalDetail() {
   const { proposalid } = useParams<{ proposalid: string }>();
@@ -35,7 +37,16 @@ export default function ProposalDetail() {
   const { switchChain } = useSwitchChain();
   const { daoid, daochain, daochainid } = useDaoRecord();
 
-  const { proposal } = useProposal({ daoid, chainid: daochain, proposalid });
+  const [propVotes, setPropVotes] = useState<{ yes: number; no: number }>({
+    yes: 0,
+    no: 0,
+  });
+
+  const { proposal } = useProposal({
+    daoid,
+    chainid: daochain,
+    proposalid,
+  });
   const { member } = useMember({
     daoid,
     chainid: daochain,
@@ -61,6 +72,15 @@ export default function ProposalDetail() {
   }, [shouldSwitch, switchChain, daochain]);
 
   useEffect(() => {
+    if (proposal) {
+      setPropVotes({
+        yes: Number(proposal.yesVotes),
+        no: Number(proposal.noVotes),
+      });
+    }
+  }, [proposal]);
+
+  useEffect(() => {
     if (address && proposal) {
       console.log("member", member);
       const hasShares = member && Number(member.shares) > 0;
@@ -70,10 +90,6 @@ export default function ProposalDetail() {
       setCanVote(isVoting && Boolean(hasShares) && !hasVoted);
     }
   }, [address, proposal, member]);
-
-  const handleVote = (approved: boolean) => {
-    console.log("voting ", approved);
-  };
 
   const handleChainSwitch = useCallback(() => {
     setShouldSwitch(true);
@@ -93,6 +109,8 @@ export default function ProposalDetail() {
     );
   }
   const status = proposal && getProposalStatus(proposal);
+  const canExecute =
+    proposal && status === PROPOSAL_STATUS["needsProcessing"] && isConnected;
 
   return (
     <div className="w-full h-full space-y-4 pb-4 px-4">
@@ -104,9 +122,11 @@ export default function ProposalDetail() {
         <div className="text-primary font-display text-4xl uppercase w-full text-left">
           {proposal.title}
         </div>
-        <div className="text-muted font-mulish text-xl mb-4 w-full text-left">
-          {truncateString(proposal.description, 400)}
-        </div>
+        {proposal.description && (
+          <div className="text-muted font-mulish text-xl mb-4 w-full text-left">
+            {truncateString(proposal.description, 400)}
+          </div>
+        )}
 
         <div className="flex flex-row justify-between mb-4 w-full">
           <div>
@@ -139,13 +159,13 @@ export default function ProposalDetail() {
           )}
         </div>
 
-        <div className="flex flex-row justify-start gap-10 mb-4 w-full">
+        <div className="flex flex-row justify-between mb-4 w-full">
           <div>
             <div className="text-primary font-display text-4xl  w-full text-left">
               YES
             </div>
             <div className="text-green-500 font-mulish text-4xl w-full text-left">
-              {proposal.yesVotes}
+              {propVotes.yes}
             </div>
           </div>
           <div>
@@ -153,21 +173,24 @@ export default function ProposalDetail() {
               NO
             </div>
             <div className="text-red-500 font-mulish text-4xl w-full text-left">
-              {proposal.noVotes}
+              {propVotes.no}
             </div>
           </div>
         </div>
 
-        {canVote && (
-          <div className="flex flex-row justify-between mb-4 w-full">
-            <Button onClick={() => handleVote(true)}>Vote Yes</Button>
-            <Button onClick={() => handleVote(false)}>Vote No</Button>
-          </div>
+        {canVote && daoid && daochain && (
+          <VoteTx
+            daoid={daoid}
+            chainid={daochain}
+            proposalid={proposalid}
+            setPropVotes={setPropVotes}
+            propVotes={propVotes}
+          />
         )}
 
-        <Button onClick={openUrl} variant="outline" className="w-full mt-4">
-          More Proposal Details
-        </Button>
+        {canExecute && daoid && daochain && (
+          <ExecuteTx daoid={daoid} chainid={daochain} proposalid={proposalid} />
+        )}
 
         <Button
           onClick={openProposalCastUrl}
@@ -175,6 +198,10 @@ export default function ProposalDetail() {
           className="w-full mt-4"
         >
           Cast Proposal
+        </Button>
+
+        <Button onClick={openUrl} variant="outline" className="w-full mt-4">
+          Audit Proposal Details
         </Button>
 
         {isConnected && !validChain && (

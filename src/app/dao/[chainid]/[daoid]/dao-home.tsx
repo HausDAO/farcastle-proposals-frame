@@ -1,5 +1,6 @@
 "use client";
 
+import { ProposalList } from "@/components/app/ProposalList";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading";
@@ -42,7 +43,7 @@ export default function DaoHome() {
       {dao && (
         <div className="flex flex-col items-center">
           <span className="text-foreground text-xl font-medium truncate">
-            {dao.name.length > 20 ? `${dao.name.slice(0, 20)}...` : dao.name}
+            {dao.name.length > 30 ? `${dao.name.slice(0, 30)}...` : dao.name}
           </span>
           <p className="text-muted-foreground text-base mt-2 px-4">
             Carve thy will into the stone of fate. Stir the realm, fill the
@@ -76,6 +77,11 @@ export default function DaoHome() {
           <Button className="w-full">Membership</Button>
         </Link>
       </div>
+
+      <div className="text-muted font-display text-3xl uppercase text-center mt-8">
+        Active Proposals
+      </div>
+      <ProposalList />
     </div>
   );
 }
