@@ -34,7 +34,7 @@ export const useDao = ({
   }
 
   const { data, ...rest } = useQuery<{ dao: DaoItem }>({
-    queryKey: [`get-dao-${chainid}-${daoid}`],
+    queryKey: [`get-dao`, { chainid, daoid }],
     enabled: Boolean(chainid && daoid),
     queryFn: async () => {
       if (!chainid || !daoid || !config?.graphKey) {

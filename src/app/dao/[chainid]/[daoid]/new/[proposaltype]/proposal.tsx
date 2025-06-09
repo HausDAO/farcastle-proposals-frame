@@ -26,6 +26,7 @@ import { useDaoRecord } from "@/providers/DaoRecordProvider";
 import { useFrameSDK } from "@/providers/FramesSDKProvider";
 import { useParams } from "next/navigation";
 import { fromHex } from "viem";
+import Link from "next/link";
 
 const getPropidFromReceipt = (receipt: WaitForReceipt): number | null => {
   if (!receipt || !receipt.logs[0].topics[1]) return null;
@@ -174,7 +175,10 @@ export default function Proposal() {
             {isSendTxError && renderError(sendTxError)}
 
             {!isConnected && (
-              <Button onClick={() => connect({ connector: connector })} className="mt-2">
+              <Button
+                onClick={() => connect({ connector: connector })}
+                className="mt-2"
+              >
                 Connect
               </Button>
             )}
@@ -189,9 +193,17 @@ export default function Proposal() {
                 />
                 <div className="flex flex-col w-full items-center gap-2">
                   {propid && (
-                    <Button onClick={openProposalCastUrl} className="w-full">
-                      Cast Proposal
-                    </Button>
+                    <>
+                      <Link
+                        href={`/dao/${daochain}/${daoid}/proposal/${propid}`}
+                        className="w-full"
+                      >
+                        <Button className="w-full">View Proposal</Button>
+                      </Link>
+                      <Button onClick={openProposalCastUrl} className="w-full">
+                        Cast Proposal
+                      </Button>
+                    </>
                   )}
                   {hash && (
                     <Button onClick={openUrl} className="w-full">

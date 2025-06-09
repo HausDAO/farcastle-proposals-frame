@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       action: {
         type: "launch_frame",
         name: "Farcastle Proposals",
-        url: `${appUrl}/dao/${chainid}/${daoid}/${proposaltype}`,
+        url: `${appUrl}/dao/${chainid}/${daoid}/new/${proposaltype}`,
         splashImageUrl: `${appUrl}/splash.png`,
         splashBackgroundColor: "#17151F",
       },
