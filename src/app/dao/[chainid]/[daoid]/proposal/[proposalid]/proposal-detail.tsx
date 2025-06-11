@@ -11,7 +11,6 @@ import { LoadingSpinner } from "@/components/ui/loading";
 import { getWagmiChainObj } from "@/lib/constants";
 import {
   getProposalTypeLabel,
-  proposalCastUrl,
   truncateAddress,
   truncateString,
 } from "@/lib/formatters";
