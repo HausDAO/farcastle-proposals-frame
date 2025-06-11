@@ -115,6 +115,7 @@ export default function ProposalDetail() {
   const status = proposal && getProposalStatus(proposal);
   const canExecute =
     proposal && status === PROPOSAL_STATUS["needsProcessing"] && isConnected;
+  const isVoting = status === PROPOSAL_STATUS["voting"];
 
   return (
     <div className="w-full h-full space-y-4 pb-4 px-4">
@@ -153,7 +154,7 @@ export default function ProposalDetail() {
 
         <div className="mb-1">
           <div className="text-muted text-xs mb-1 uppercase w-full text-center">
-            Voting Ends
+            {isVoting ? "Voting Ends" : "Voting Ended"}
           </div>
           <div className="font-mulish text-base w-full text-center">
             {format(
