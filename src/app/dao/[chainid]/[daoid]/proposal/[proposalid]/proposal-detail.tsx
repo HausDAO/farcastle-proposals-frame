@@ -3,6 +3,7 @@
 import sdk from "@farcaster/frame-sdk";
 import { useCallback, useEffect, useState } from "react";
 import { useAccount, useChainId, useSwitchChain } from "wagmi";
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -115,64 +116,67 @@ export default function ProposalDetail() {
   return (
     <div className="w-full h-full space-y-4 pb-4 px-4">
       <Card className="flex flex-col items-center px-4 pt-4 pb-8 rounded-none">
-        <div className="text-muted font-display text-lg uppercase w-full text-left">
+        <div className="text-muted text-xs mb-1 uppercase w-full text-left">
           {`${getProposalTypeLabel(proposal.proposalType)} | ${proposalid}`}
         </div>
 
-        <div className="text-primary font-display text-4xl uppercase w-full text-left">
+        <div className="text-primary font-display text-2xl mb-1 uppercase w-full text-left">
           {proposal.title}
         </div>
         {proposal.description && (
-          <div className="text-muted font-mulish text-xl mb-4 w-full text-left">
+          <div className="leading-relaxed font-mulish mb-4 w-full text-left">
             {truncateString(proposal.description, 400)}
           </div>
         )}
 
-        <div className="flex flex-row justify-between mb-4 w-full">
+        <div className="flex flex-row justify-between mb-2 w-full">
           <div>
-            <div className="text-primary font-display text-xl  w-full text-left">
+            <div className="text-muted text-xs mb-1 uppercase w-full text-left">
               Submitted by
             </div>
-            <div className="text-muted font-mulish text-base w-full text-left">
+            <div className="font-mulish text-base w-full text-left">
               {truncateAddress(proposal.proposedBy)}
             </div>
           </div>
           <div>
-            <div className="text-primary font-display text-xl  w-full text-left">
-              Voting ends
+            <div className="text-muted text-xs mb-1 uppercase w-full text-right">
+              Status
             </div>
-            <div className="text-muted font-mulish text-base w-full text-left">
-              {truncateAddress(proposal.proposedBy)}
+            <div className="font-mulish text-base w-full text-right">
+            {proposalStateText(proposal, status)}
             </div>
           </div>
         </div>
 
-        <div className="mb-4">
-          <div className="text-desructive font-mulish text-xl w-full text-left">
-            {proposalStateText(proposal, status)}
+        <div className="mb-1">
+            <div className="text-muted text-xs mb-1 uppercase w-full text-center">
+              Voting Ends
+            </div>
+          <div className="font-mulish text-base w-full text-center">
+            {format(new Date(Number(proposal.votingEnds) * 1000), "MMMM dd, HH:mm z")}
           </div>
 
-          {status === PROPOSAL_STATUS.needsProcessing && (
-            <div className="text-red-500 font-mulish text-sm w-full text-left">
+          {/* {status === PROPOSAL_STATUS.needsProcessing && (
+            <div className="text-destructive font-mulish text-sm w-full text-left mt-1">
               * Proposals must be executed in order
             </div>
-          )}
+          )} */}
         </div>
 
-        <div className="flex flex-row justify-between mb-4 w-full">
-          <div>
-            <div className="text-primary font-display text-4xl  w-full text-left">
+        <div className="flex flex-row justify-between mb-1 w-full">
+          <div className="w-1/2">
+            <div className="text-primary font-display text-2xl uppercase text-center -mb-2">
               YES
             </div>
-            <div className="text-green-500 font-mulish text-4xl w-full text-left">
+            <div className="text-success font-display text-4xl text-center">
               {propVotes.yes}
             </div>
           </div>
-          <div>
-            <div className="text-primary font-display text-4xl  w-full text-left">
-              NO
+          <div className="w-1/2">
+            <div className="text-primary font-display text-2xl uppercase text-center -mb-2">
+              No
             </div>
-            <div className="text-red-500 font-mulish text-4xl w-full text-left">
+            <div className="text-destructive font-display text-4xl text-center">
               {propVotes.no}
             </div>
           </div>
@@ -188,20 +192,26 @@ export default function ProposalDetail() {
           />
         )}
 
+        {status === PROPOSAL_STATUS.needsProcessing && (
+            <div className="text-destructive font-mulish text-sm w-full text-center mb-2">
+              Proposals Must Be Executed in Order
+            </div>
+          )}
+
         {canExecute && daoid && daochain && (
           <ExecuteTx daoid={daoid} chainid={daochain} proposalid={proposalid} />
         )}
 
         <Button
           onClick={openProposalCastUrl}
-          variant="outline"
-          className="w-full mt-4"
+          variant="secondary"
+          className="w-full"
         >
-          Cast Proposal
+          Share Proposal
         </Button>
 
-        <Button onClick={openUrl} variant="outline" className="w-full mt-4">
-          Audit Proposal Details
+        <Button onClick={openUrl} variant="tertiary" className="w-full mt-4">
+          Audit Proposal
         </Button>
 
         {isConnected && !validChain && (

@@ -112,6 +112,7 @@ export const ExecuteTx = ({
               <Button
                 disabled={isSendTxPending || isConfirming}
                 onClick={handleProcess}
+                className="w-full"
               >
                 Execute Proposal
               </Button>
