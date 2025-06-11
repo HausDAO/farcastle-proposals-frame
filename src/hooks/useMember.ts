@@ -23,6 +23,8 @@ export const useMember = ({
     );
   }
 
+  console.log("useMember chainid", chainid);
+
   const dhUrl = getGraphUrl({
     chainid: chainid || "",
     graphKey: config?.graphKey || "",

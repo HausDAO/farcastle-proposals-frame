@@ -17,6 +17,7 @@ export default async function Image({
 }: {
   params: { chainid: string; daoid: string };
 }) {
+  console.log("dao api route chainid", params.chainid);
   const dhUrl = getGraphUrl({
     chainid: params.chainid,
     graphKey: process.env.NEXT_PUBLIC_GRAPH_KEY || "",
