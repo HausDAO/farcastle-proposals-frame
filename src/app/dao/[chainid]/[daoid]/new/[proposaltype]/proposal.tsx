@@ -18,7 +18,7 @@ import { Card } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading";
 import { getExplorerUrl, getWagmiChainObj } from "@/lib/constants";
 import { FORM_CONFIGS, FormConfig, validFormId } from "@/lib/form-configs";
-import { proposalCastUrl, truncateError } from "@/lib/formatters";
+import { truncateError } from "@/lib/formatters";
 import { ArbitraryState, ValidNetwork } from "@/lib/tx-prepper/prepper-types";
 import { prepareTX } from "@/lib/tx-prepper/tx-prepper";
 import { WaitForReceipt } from "@/lib/types";
@@ -45,6 +45,7 @@ export default function Proposal() {
   const { daoid, daochain, daosafe, daochainid } = useDaoRecord();
 
   const [propid, setPropid] = useState<number | null>(null);
+  const [propTitle, setPropTitle] = useState<string | null>(null);
   const [formConfig, setFormConfig] = useState<FormConfig | null>(null);
 
   const {
@@ -75,9 +76,13 @@ export default function Proposal() {
   }, [receiptData]);
 
   const openProposalCastUrl = useCallback(() => {
-    if (!daochain || !daoid || !propid) return;
-    sdk.actions.openUrl(proposalCastUrl(daochain, daoid, propid));
-  }, [propid, daoid, daochain]);
+    sdk.actions.composeCast({
+      text: propTitle || "A new proposal",
+      embeds: [
+        `https://proposals.farcastle.net/dao/${daochain}/${daoid}/proposal/${propid}`,
+      ],
+    });
+  }, [propid, daoid, daochain, propTitle]);
 
   const openUrl = useCallback(() => {
     sdk.actions.openUrl(`${getExplorerUrl(daochain)}/tx/${hash}`);
@@ -115,6 +120,7 @@ export default function Proposal() {
     console.log("txPrep", txPrep);
     if (!txPrep) return;
 
+    setPropTitle(values.title);
     writeContract(txPrep);
   };
 

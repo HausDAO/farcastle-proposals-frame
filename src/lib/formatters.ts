@@ -13,13 +13,6 @@ export const truncateError = (message: string) => {
   if (!message) return "";
   return `${message.slice(0, 25)}...`;
 };
-export const proposalCastUrl = (
-  daochain: string,
-  daoid: string,
-  propid: number
-) => {
-  return `https://farcaster.xyz/~/compose?text=&embeds[]=https://proposals.farcastle.net/dao/${daochain}/${daoid}/proposal/${propid}`;
-};
 
 export const PROPOSAL_TYPE_LABELS: Record<string, string> = {
   SIGNAL: "Signal Proposal",

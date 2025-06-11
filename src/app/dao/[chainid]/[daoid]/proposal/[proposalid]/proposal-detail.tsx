@@ -11,7 +11,6 @@ import { LoadingSpinner } from "@/components/ui/loading";
 import { getWagmiChainObj } from "@/lib/constants";
 import {
   getProposalTypeLabel,
-  proposalCastUrl,
   truncateAddress,
   truncateString,
 } from "@/lib/formatters";
@@ -56,11 +55,6 @@ export default function ProposalDetail() {
 
   const [canVote, setCanVote] = useState(false);
 
-  const openProposalCastUrl = useCallback(() => {
-    if (!daochain || !daoid || !proposalid) return;
-    sdk.actions.openUrl(proposalCastUrl(daochain, daoid, Number(proposalid)));
-  }, [proposalid, daoid, daochain]);
-
   const validChain = chainId === daochainid;
 
   const [shouldSwitch, setShouldSwitch] = useState(false);
@@ -96,9 +90,18 @@ export default function ProposalDetail() {
     setShouldSwitch(true);
   }, []);
 
+  const openProposalCastUrl = useCallback(() => {
+    sdk.actions.composeCast({
+      text: proposal?.title || "",
+      embeds: [
+        `https://proposals.farcastle.net/dao/${daochain}/${daoid}/proposal/${proposalid}`,
+      ],
+    });
+  }, [proposalid, daoid, daochain, proposal]);
+
   const openUrl = useCallback(() => {
     sdk.actions.openUrl(
-      `https://admin.daohaus.club/${daochain}/${daoid}/proposal/${proposalid}`
+      `https://admin.daohaus.club/#/molochV3/${daochain}/${daoid}/proposal/${proposalid}`
     );
   }, [daoid, daochain, proposalid]);
 
@@ -112,6 +115,7 @@ export default function ProposalDetail() {
   const status = proposal && getProposalStatus(proposal);
   const canExecute =
     proposal && status === PROPOSAL_STATUS["needsProcessing"] && isConnected;
+  const isVoting = status === PROPOSAL_STATUS["voting"];
 
   return (
     <div className="w-full h-full space-y-4 pb-4 px-4">
@@ -143,17 +147,20 @@ export default function ProposalDetail() {
               Status
             </div>
             <div className="font-mulish text-base w-full text-right">
-            {proposalStateText(proposal, status)}
+              {proposalStateText(proposal, status)}
             </div>
           </div>
         </div>
 
         <div className="mb-1">
-            <div className="text-muted text-xs mb-1 uppercase w-full text-center">
-              Voting Ends
-            </div>
+          <div className="text-muted text-xs mb-1 uppercase w-full text-center">
+            {isVoting ? "Voting Ends" : "Voting Ended"}
+          </div>
           <div className="font-mulish text-base w-full text-center">
-            {format(new Date(Number(proposal.votingEnds) * 1000), "MMMM dd, HH:mm z")}
+            {format(
+              new Date(Number(proposal.votingEnds) * 1000),
+              "MMMM dd, HH:mm z"
+            )}
           </div>
 
           {/* {status === PROPOSAL_STATUS.needsProcessing && (
@@ -193,10 +200,10 @@ export default function ProposalDetail() {
         )}
 
         {status === PROPOSAL_STATUS.needsProcessing && (
-            <div className="text-destructive font-mulish text-sm w-full text-center mb-2">
-              Proposals Must Be Executed in Order
-            </div>
-          )}
+          <div className="text-destructive font-mulish text-sm w-full text-center mb-2">
+            Proposals Must Be Executed in Order
+          </div>
+        )}
 
         {canExecute && daoid && daochain && (
           <ExecuteTx daoid={daoid} chainid={daochain} proposalid={proposalid} />
