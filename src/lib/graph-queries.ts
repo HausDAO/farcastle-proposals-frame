@@ -304,6 +304,7 @@ const proposalFields = `
   cancelledBy
   cancelled
   cancelledTxAt
+  currentlyPassing
   yesBalance
   noBalance
   yesVotes

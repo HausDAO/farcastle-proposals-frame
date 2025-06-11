@@ -1,4 +1,3 @@
-import { formatShortDateTimeFromSeconds } from "./formatters";
 import { ProposalItem, VoteItem } from "./types";
 
 export const nowInSeconds = (): number => new Date().getTime() / 1000;
@@ -206,12 +205,10 @@ export const proposalStateText = (
 ): string => {
   let statusText: string = status;
   if (status === PROPOSAL_STATUS.voting) {
-    const votingEnds = formatShortDateTimeFromSeconds(proposal.votingEnds);
-    statusText = `Voting open until ${votingEnds}`;
+    statusText = `Voting`;
   }
   if (status === PROPOSAL_STATUS.grace) {
-    const graceEnds = formatShortDateTimeFromSeconds(proposal.graceEnds);
-    statusText = `In grace period until ${graceEnds}`;
+    statusText = `Grace`;
   }
 
   return statusText;

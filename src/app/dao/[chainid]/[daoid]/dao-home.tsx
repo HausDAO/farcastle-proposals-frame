@@ -60,7 +60,7 @@ export default function DaoHome() {
         </Link>
       </div>
 
-      <div className="mt-2 w-full px-4">
+      <div className="mt-4 w-full px-4">
         <Link
           href={`/dao/${params.chainid}/${params.daoid}/new/REQUEST_FUNDING`}
           className="w-full"
@@ -69,7 +69,7 @@ export default function DaoHome() {
         </Link>
       </div>
 
-      <div className="mt-2 w-full px-4">
+      <div className="mt-4 w-full px-4">
         <Link
           href={`/dao/${params.chainid}/${params.daoid}/new/REQUEST_MEMBERSHIP`}
           className="w-full"
