@@ -152,15 +152,15 @@ export default function ProposalDetail() {
             <div className="text-muted text-xs mb-1 uppercase w-full text-center">
               Voting Ends
             </div>
-          <div className="font-mulish text-base w-full">
+          <div className="font-mulish text-base w-full text-center">
             {format(new Date(Number(proposal.votingEnds) * 1000), "MMMM dd, HH:mm z")}
           </div>
 
-          {status === PROPOSAL_STATUS.needsProcessing && (
-            <div className="text-destructive font-mulish text-sm w-full text-left">
+          {/* {status === PROPOSAL_STATUS.needsProcessing && (
+            <div className="text-destructive font-mulish text-sm w-full text-left mt-1">
               * Proposals must be executed in order
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="flex flex-row justify-between mb-1 w-full">
@@ -191,6 +191,12 @@ export default function ProposalDetail() {
             propVotes={propVotes}
           />
         )}
+
+{status === PROPOSAL_STATUS.needsProcessing && (
+            <div className="text-destructive font-mulish text-sm w-full text-center mb-2">
+              Proposals Must Be Executed in Order
+            </div>
+          )}
 
         {canExecute && daoid && daochain && (
           <ExecuteTx daoid={daoid} chainid={daochain} proposalid={proposalid} />
