@@ -40,6 +40,8 @@ export async function GET(
   const { daochain, daoid, proposalid } = await params;
 
   try {
+    console.log("proposal route chainid", daochain);
+
     const dhUrl = getGraphUrl({
       chainid: daochain,
       graphKey: process.env.NEXT_PUBLIC_GRAPH_KEY || "",
