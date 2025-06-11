@@ -22,19 +22,19 @@ export const ProposalListCard = ({ proposal }: ProposalListCardProps) => {
       <Card className="bg-background border hover:bg-card transition-colors rounded-none">
         <div className="flex items-center gap-3 p-4">
           <div className="flex flex-col">
-            <span className="text-muted text-xs">
+            <span className="text-muted text-xs uppercase">
               {`${getProposalTypeLabel(proposal.proposalType)} | ${proposal.proposalId}`}
             </span>
             <span className="text-foreground text-lg truncate mb-2">
               {proposal.title}
             </span>
-            <span className="text-muted text-sm truncate">
+            <span className="text-muted text-xs uppercase truncate">
               {getProposalStatus(proposal)}
             </span>
             <div className="flex flex-row gap-2 text-xs">
-              <span className="text-green-500">{proposal.yesVotes}</span>
-              <span className="text-muted">to</span>
-              <span className="text-red-500">{proposal.yesVotes}</span>
+              <span className="font-display text-xl text-success">{proposal.yesVotes}</span>
+              <span className="text-muted relative top-2">to</span>
+              <span className="font-display text-xl text-destructive">{proposal.noVotes}</span>
             </div>
           </div>
         </div>
