@@ -164,19 +164,19 @@ export default function ProposalDetail() {
         </div>
 
         <div className="flex flex-row justify-between mb-1 w-full">
-          <div>
-            <div className="text-primary font-display text-2xl uppercase w-full text-left -mb-2">
+          <div className="w-1/2">
+            <div className="text-primary font-display text-2xl uppercase text-center -mb-2">
               YES
             </div>
-            <div className="text-success font-display text-4xl w-full text-left">
+            <div className="text-success font-display text-4xl text-center">
               {propVotes.yes}
             </div>
           </div>
-          <div>
-            <div className="text-primary font-display text-2xl uppercase w-full text-right -mb-2">
-              NO
+          <div className="w-1/2">
+            <div className="text-primary font-display text-2xl uppercase text-center -mb-2">
+              No
             </div>
-            <div className="text-destructive font-display text-4xl w-full text-right">
+            <div className="text-destructive font-display text-4xl text-center">
               {propVotes.no}
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function ProposalDetail() {
           />
         )}
 
-{status === PROPOSAL_STATUS.needsProcessing && (
+        {status === PROPOSAL_STATUS.needsProcessing && (
             <div className="text-destructive font-mulish text-sm w-full text-center mb-2">
               Proposals Must Be Executed in Order
             </div>
