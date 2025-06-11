@@ -140,17 +140,20 @@ export default function ProposalDetail() {
           </div>
           <div>
             <div className="text-muted text-xs mb-1 uppercase w-full text-right">
-              Voting ends
+              Status
             </div>
             <div className="font-mulish text-base w-full text-right">
-            {format(new Date(Number(proposal.votingEnds) * 1000), "MMMM dd, HH:mm z")}
+            {proposalStateText(proposal, status)}
             </div>
           </div>
         </div>
 
         <div className="mb-1">
-          <div className="text-muted text-xs uppercase w-full">
-            {proposalStateText(proposal, status)}
+            <div className="text-muted text-xs mb-1 uppercase w-full text-center">
+              Voting Ends
+            </div>
+          <div className="font-mulish text-base w-full">
+            {format(new Date(Number(proposal.votingEnds) * 1000), "MMMM dd, HH:mm z")}
           </div>
 
           {status === PROPOSAL_STATUS.needsProcessing && (
@@ -196,9 +199,9 @@ export default function ProposalDetail() {
         <Button
           onClick={openProposalCastUrl}
           variant="secondary"
-          className="w-full mt-4"
+          className="w-full"
         >
-          Cast Proposal
+          Share Proposal
         </Button>
 
         <Button onClick={openUrl} variant="tertiary" className="w-full mt-4">

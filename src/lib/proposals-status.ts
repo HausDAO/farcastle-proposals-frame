@@ -207,11 +207,11 @@ export const proposalStateText = (
   let statusText: string = status;
   if (status === PROPOSAL_STATUS.voting) {
     const votingEnds = formatShortDateTimeFromSeconds(proposal.votingEnds);
-    statusText = `Voting open until ${votingEnds}`;
+    statusText = `Voting`;
   }
   if (status === PROPOSAL_STATUS.grace) {
     const graceEnds = formatShortDateTimeFromSeconds(proposal.graceEnds);
-    statusText = `In grace period until ${graceEnds}`;
+    statusText = `Grace`;
   }
 
   return statusText;

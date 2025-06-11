@@ -122,20 +122,22 @@ export const VoteTx = ({
           {isSendTxPending || isConfirming ? (
             <Spinner />
           ) : (
-            <>
+            <div className="flex gap-4 w-full">
               <Button
                 disabled={isSendTxPending || isConfirming}
                 onClick={() => handleVote(true)}
+                className="w-full"
               >
                 Vote Yes
               </Button>
               <Button
                 disabled={isSendTxPending || isConfirming}
                 onClick={() => handleVote(false)}
+                className="w-full"
               >
                 Vote No
               </Button>
-            </>
+            </div>
           )}
         </div>
       )}
@@ -160,7 +162,7 @@ export const VoteTx = ({
       )}
 
       {isError && (
-        <div className="text-xs text-red-500">Error submitting vote</div>
+        <div className="text-destructive mb-4">Error Submitting Vote</div>
       )}
     </>
   );
