@@ -32,8 +32,6 @@ export const useActiveDaoProposals = ({
     );
   }
 
-  console.log("useActiveDaoProposals chainid", chainid);
-
   const dhUrl = getGraphUrl({
     chainid: chainid || "",
     graphKey: config?.graphKey || "",

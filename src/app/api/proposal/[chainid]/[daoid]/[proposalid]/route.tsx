@@ -31,24 +31,20 @@ export async function GET(
     params,
   }: {
     params: Promise<{
-      daochain: string;
+      chainid: string;
       daoid: string;
       proposalid: string;
     }>;
   }
 ) {
-  const { daochain, daoid, proposalid } = await params;
+  const { chainid, daoid, proposalid } = await params;
 
   try {
-    console.log("proposal route chainid", daochain);
-
     const dhUrl = getGraphUrl({
-      chainid: daochain,
+      chainid: chainid,
       graphKey: process.env.NEXT_PUBLIC_GRAPH_KEY || "",
       subgraphKey: "DAOHAUS",
     });
-
-    console.log("dhUrl", dhUrl);
 
     const baseUrl =
       process.env.NEXT_PUBLIC_URL || "https://proposals.farcastle.net";

@@ -23,8 +23,6 @@ export const useProposal = ({
     );
   }
 
-  console.log("useProposal chainid", chainid);
-
   const dhUrl = getGraphUrl({
     chainid: chainid || "",
     graphKey: config?.graphKey || "",
