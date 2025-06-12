@@ -21,7 +21,7 @@ export const ProposalListCard = ({ proposal }: ProposalListCardProps) => {
     >
       <Card className="bg-background border hover:bg-card transition-colors rounded-none">
         <div className="flex items-center gap-3 p-4">
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full max-w-[350px]">
             <span className="text-muted text-xs uppercase">
               {`${getProposalTypeLabel(proposal.proposalType)} | ${proposal.proposalId}`}
             </span>
