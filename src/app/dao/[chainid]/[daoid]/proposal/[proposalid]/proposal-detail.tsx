@@ -29,13 +29,17 @@ import { VoteTx } from "@/components/app/VoteTx";
 import { ExecuteTx } from "@/components/app/ExecuteTx";
 
 export default function ProposalDetail() {
-  const { proposalid } = useParams<{ proposalid: string }>();
+  const { daoid, chainid, proposalid } = useParams<{
+    proposalid: string;
+    chainid: string;
+    daoid: string;
+  }>();
 
   const { isLoaded } = useFrameSDK();
   const { isConnected, address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
-  const { daoid, daochain, daochainid } = useDaoRecord();
+  const { daochainid } = useDaoRecord();
 
   const [propVotes, setPropVotes] = useState<{ yes: number; no: number }>({
     yes: 0,
@@ -44,12 +48,12 @@ export default function ProposalDetail() {
 
   const { proposal } = useProposal({
     daoid,
-    chainid: daochain,
+    chainid: chainid,
     proposalid,
   });
   const { member } = useMember({
     daoid,
-    chainid: daochain,
+    chainid: chainid,
     memberaddress: address,
   });
 
@@ -61,10 +65,10 @@ export default function ProposalDetail() {
 
   useEffect(() => {
     if (shouldSwitch) {
-      switchChain({ chainId: getWagmiChainObj(daochain).id });
+      switchChain({ chainId: getWagmiChainObj(chainid).id });
       setShouldSwitch(false);
     }
-  }, [shouldSwitch, switchChain, daochain]);
+  }, [shouldSwitch, switchChain, chainid]);
 
   useEffect(() => {
     if (proposal) {
@@ -94,16 +98,16 @@ export default function ProposalDetail() {
     sdk.actions.composeCast({
       text: proposal?.title || "",
       embeds: [
-        `https://proposals.farcastle.net/dao/${daochain}/${daoid}/proposal/${proposalid}`,
+        `https://proposals.farcastle.net/dao/${chainid}/${daoid}/proposal/${proposalid}`,
       ],
     });
-  }, [proposalid, daoid, daochain, proposal]);
+  }, [proposalid, daoid, chainid, proposal]);
 
   const openUrl = useCallback(() => {
     sdk.actions.openUrl(
-      `https://admin.daohaus.club/#/molochV3/${daochain}/${daoid}/proposal/${proposalid}`
+      `https://admin.daohaus.club/#/molochV3/${chainid}/${daoid}/proposal/${proposalid}`
     );
-  }, [daoid, daochain, proposalid]);
+  }, [daoid, chainid, proposalid]);
 
   if (!isLoaded || !proposal) {
     return (
@@ -189,10 +193,10 @@ export default function ProposalDetail() {
           </div>
         </div>
 
-        {canVote && daoid && daochain && (
+        {canVote && daoid && chainid && (
           <VoteTx
             daoid={daoid}
-            chainid={daochain}
+            chainid={chainid}
             proposalid={proposalid}
             setPropVotes={setPropVotes}
             propVotes={propVotes}
@@ -205,8 +209,8 @@ export default function ProposalDetail() {
           </div>
         )}
 
-        {canExecute && daoid && daochain && (
-          <ExecuteTx daoid={daoid} chainid={daochain} proposalid={proposalid} />
+        {canExecute && daoid && chainid && (
+          <ExecuteTx daoid={daoid} chainid={chainid} proposalid={proposalid} />
         )}
 
         <Button
@@ -223,7 +227,7 @@ export default function ProposalDetail() {
 
         {isConnected && !validChain && (
           <Button onClick={handleChainSwitch} className="mt-2">
-            Switch to {getWagmiChainObj(daochain).name}
+            Switch to {getWagmiChainObj(chainid).name}
           </Button>
         )}
       </Card>

@@ -41,8 +41,6 @@ export const useDao = ({
         return { dao: undefined as unknown as DaoItem };
       }
 
-      console.log("useDao chainid", chainid);
-
       const dhUrl = getGraphUrl({
         chainid,
         graphKey: config.graphKey,
