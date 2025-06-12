@@ -132,7 +132,7 @@ export default function ProposalDetail() {
           {proposal.title}
         </div>
         {proposal.description && (
-          <div className="leading-relaxed font-mulish mb-4 w-full text-left">
+          <div className="leading-relaxed font-mulish mb-4 w-full text-left break-words">
             {truncateString(proposal.description, 400)}
           </div>
         )}
@@ -166,12 +166,6 @@ export default function ProposalDetail() {
               "MMMM dd, HH:mm z"
             )}
           </div>
-
-          {/* {status === PROPOSAL_STATUS.needsProcessing && (
-            <div className="text-destructive font-mulish text-sm w-full text-left mt-1">
-              * Proposals must be executed in order
-            </div>
-          )} */}
         </div>
 
         <div className="flex flex-row justify-between mb-1 w-full">
