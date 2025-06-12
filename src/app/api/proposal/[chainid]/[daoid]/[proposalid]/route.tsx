@@ -13,10 +13,10 @@ export const dynamic = "force-dynamic";
 
 // Define the dimensions for the generated OpenGraph image
 const size = {
-  // width: 600,
-  // height: 400,
-  width: 1200,
-  height: 630,
+  width: 600,
+  height: 400,
+  // width: 1200,
+  // height: 630,
 };
 
 /**
@@ -95,8 +95,8 @@ export async function GET(
       console.log("proposal", proposal);
 
       if (proposal) {
-        proposalTitle = proposal.title;
-        proposalDescription = truncateString(proposal.description, 300);
+        proposalTitle = truncateString(proposal.title, 45);
+        proposalDescription = truncateString(proposal.description, 250);
         proposalType = getProposalTypeLabel(proposal.proposalType);
         yesVotes = proposal.yesVotes;
         noVotes = proposal.noVotes;
@@ -130,8 +130,8 @@ export async function GET(
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            paddingTop: "40px",
-            paddingBottom: "40px",
+            paddingTop: "20px",
+            paddingBottom: "20px",
             color: "#00B1CC", // Changed default text color
           }}
         >
@@ -140,16 +140,17 @@ export async function GET(
             style={{
               background: "#17151F",
               height: "100%",
-              width: "70%",
+              width: "90%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "flex-start",
-              padding: "40px",
+              padding: "20px",
               border: "2px solid #39393C",
               borderRadius: "0px",
               marginLeft: "10px",
               marginRight: "10px",
+              overflow: "hidden",
             }}
           >
             {/* Top section */}
@@ -159,7 +160,7 @@ export async function GET(
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                gap: "4px",
+                gap: "32px",
                 width: "100%",
               }}
             >
@@ -170,13 +171,14 @@ export async function GET(
                   alignItems: "flex-start",
                   justifyContent: "flex-start",
                   gap: "2px",
+                  maxWidth: "75%",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "24px",
-                    fontFamily: "'VT323'",
+                    fontSize: "16px",
+                    fontFamily: "'Mulish'",
                     color: "#9FA3AF",
                     textTransform: "uppercase",
                     justifyContent: "flex-start",
@@ -188,11 +190,12 @@ export async function GET(
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "48px",
+                    fontSize: "32px",
                     fontFamily: "'VT323'",
                     color: "#00B1CC",
                     textTransform: "uppercase",
                     justifyContent: "center",
+                    marginBottom: "8px",
                   }}
                 >
                   {proposalTitle}
@@ -203,9 +206,10 @@ export async function GET(
                   src={imgSrc}
                   alt="Campaign Icon"
                   style={{
-                    width: "110px",
-                    height: "110px",
+                    width: "80px",
+                    height: "80px",
                     borderRadius: "100%",
+                    objectFit: "contain",
                   }}
                 />
               </div>
@@ -217,7 +221,6 @@ export async function GET(
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                gap: "4px",
                 width: "100%",
                 marginBottom: "20px",
               }}
@@ -225,10 +228,9 @@ export async function GET(
               <div
                 style={{
                   display: "flex",
-                  fontSize: "24px",
-                  fontFamily: "'VT323'",
-                  color: "#9FA3AF",
-                  textTransform: "uppercase",
+                  fontSize: "20px",
+                  fontFamily: "'Mulish'",
+                  color: "#EAF8FF",
                   justifyContent: "flex-start",
                 }}
               >
@@ -240,28 +242,31 @@ export async function GET(
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-start",
-                gap: "150px",
+                justifyContent: "space-between",
                 width: "100%",
+                marginTop: "auto",
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
-                  justifyContent: "flex-start",
-                  gap: "2px",
+                  alignItems: "center",
+                  width: "50%",
+                  textAlign: "center",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "48px",
+                    fontSize: "32px",
                     fontFamily: "'VT323'",
                     color: "#00B1CC",
                     textTransform: "uppercase",
                     justifyContent: "center",
+                    margin: 0,
+                    padding: 0,
+                    lineHeight: 1,
                   }}
                 >
                   Yes
@@ -275,6 +280,9 @@ export async function GET(
                     color: "#707C4E",
                     textTransform: "uppercase",
                     justifyContent: "center",
+                    margin: 0,
+                    padding: 0,
+                    lineHeight: 1,
                   }}
                 >
                   {yesVotes}
@@ -284,19 +292,22 @@ export async function GET(
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
-                  justifyContent: "flex-start",
-                  gap: "2px",
+                  alignItems: "center",
+                  width: "50%",
+                  textAlign: "center",
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "48px",
+                    fontSize: "32px",
                     fontFamily: "'VT323'",
                     color: "#00B1CC",
                     textTransform: "uppercase",
                     justifyContent: "center",
+                    margin: 0,
+                    padding: 0,
+                    lineHeight: 1,
                   }}
                 >
                   No
@@ -309,6 +320,9 @@ export async function GET(
                     color: "#CD4A50",
                     textTransform: "uppercase",
                     justifyContent: "center",
+                    margin: 0,
+                    padding: 0,
+                    lineHeight: 1,
                   }}
                 >
                   {noVotes}

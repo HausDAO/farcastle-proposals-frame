@@ -8,8 +8,10 @@ import { FIND_DAO_LITE } from "@/lib/graph-queries";
 export const runtime = "edge";
 export const contentType = "image/png";
 export const size = {
-  width: 1200,
-  height: 630,
+  // width: 1200,
+  // height: 630,
+  width: 600,
+  height: 400,
 };
 
 export default async function Image({
