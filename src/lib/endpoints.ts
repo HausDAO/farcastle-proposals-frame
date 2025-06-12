@@ -9,7 +9,7 @@ export const getGraphUrl = ({
 }): string => {
   const subgraphHash = SUBGRAPH_IDS[subgraphKey][chainid];
   if (!subgraphHash) {
-    console.log("invalid chainid or subgraphkey");
+    console.log("invalid chainid or subgraphkey", subgraphKey, chainid);
   }
   return `https://gateway-arbitrum.network.thegraph.com/api/${graphKey}/subgraphs/id/${subgraphHash}`;
 };
