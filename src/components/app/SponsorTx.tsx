@@ -78,6 +78,8 @@ export const SponsorTx = ({
       return;
     }
 
+    console.log("proposalid", proposalid);
+
     writeContract({
       address: daoid as `0x${string}`,
       abi: daoAbi,
@@ -123,7 +125,7 @@ export const SponsorTx = ({
       {isConfirmed && (
         <div className="flex flex-col items-center gap-3">
           <Image src="/heart.svg" alt="Success" width={50} height={50} />
-          Proposal has been executed
+          Proposal has been sponsored
           <div className="flex flex-col w-full items-center gap-2">
             {hash && (
               <Button onClick={openUrl} className="w-full">
