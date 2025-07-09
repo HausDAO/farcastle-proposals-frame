@@ -27,6 +27,7 @@ import {
 import { useMember } from "@/hooks/useMember";
 import { VoteTx } from "@/components/app/VoteTx";
 import { ExecuteTx } from "@/components/app/ExecuteTx";
+import { SponsorTx } from "@/components/app/SponsorTx";
 
 export default function ProposalDetail() {
   const { daoid, chainid, proposalid } = useParams<{
@@ -205,6 +206,10 @@ export default function ProposalDetail() {
 
         {canExecute && daoid && chainid && (
           <ExecuteTx daoid={daoid} chainid={chainid} proposalid={proposalid} />
+        )}
+
+        {status === PROPOSAL_STATUS.unsponsored && (
+          <SponsorTx daoid={daoid} chainid={chainid} proposalid={proposalid} />
         )}
 
         <Button
