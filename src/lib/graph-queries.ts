@@ -390,7 +390,6 @@ export const LIST_ACTIVE_DAO_PROPOSALS = gql`
       where: { 
         dao: $daoid           
         cancelled: false
-        sponsored: true
         processed: false
         actionFailed: false 
       }
