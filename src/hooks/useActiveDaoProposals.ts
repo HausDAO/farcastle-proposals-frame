@@ -10,6 +10,7 @@ const nowInSeconds = (): number => new Date().getTime() / 1000;
 const filterActive = (proposals: ProposalItem[]) => {
   const now = nowInSeconds();
   return proposals.filter((proposal) => {
+    if (proposal.graceEnds === "0") return true;
     if (Number(proposal.graceEnds) > now) return true;
     return proposal.currentlyPassing;
   });
